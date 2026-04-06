@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Менеджер задач</title>
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="header__logo">Менеджер задач</div>
+            <nav class="header__nav">
+                <button class="nav-btn nav-btn--active" data-page="tasks">Задачи</button>
+                <button class="nav-btn" data-page="stats">Статистика</button>
+                <button class="nav-btn" data-page="reminders">Напоминания</button>
+            </nav>
+        </header>
+
+        <main class="pages">
+            <section class="page page--active" id="tasksPage">
+                <h2 class="page__title">Страница задач</h2>
+                <div class="page-content">
+                    <div class="tasks-page">
+                        <div class="filters">
+                             <h3 class="filters__title">Фильтры</h3>
+                             <ul class="filters__list">
+                                 <li class="filters__item"><button class="filters__btn filters__btn--active" data-filter="all">Все</button></li>
+                                 <li class="filters__item"><button class="filters__btn" data-filter="active">Активные</button></li>
+                                 <li class="filters__item"><button class="filters__btn" data-filter="completed">Выполненные</button></li>
+                            </ul>
+                            <div class="server-time-widget" id="server-time-widget">
+                              <div class="server-time-widget__title">🕒 Точное время</div>
+                             <div class="server-time-widget__clock" id="live-clock">--:--:--</div>
+                             <div class="server-time-widget__timezone" id="timezone-info"></div>
+                        </div>
+                        </div>
+                        <div class="tasks-content">
+                            <div class="tasks-header">
+                                <h3 class="tasks-header__title">Список задач</h3>
+                                <button class="tasks-header__add-btn" id="addTaskBtn">+ Добавить задачу</button>
+                            </div>
+                            <div class="tasks-list" id="tasksList"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page" id="statsPage">
+                <h2 class="page__title">Страница статистики</h2>
+                <div class="page-content">
+                    <div class="stats-page">
+                        <div class="stats-grid" id="statsGrid"></div>
+                        <div class="stats-chart-placeholder">
+                        <h3 class="stats-chart__title">Процент выполнения задач</h3>
+                          <canvas id="statsChart" width="200" height="200" style="max-width: 200px; max-height: 200px; width: 100%; height: auto;"></canvas>
+                             <div id="statsChartPercent" class="stats-chart__percent"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page" id="remindersPage">
+                <h2 class="page__title">Страница напоминаний</h2>
+                <div class="page-content">
+                    <div class="reminders-page">
+                        <div class="reminders-list" id="remindersFullList"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>© 2026 Менеджер задач с интегрированной системой уведомлений и напоминаний. <a href="#" class="footer__link" id="githubLink">GitHub</a></p>
+        </footer>
+    </div>
+
+    <div class="modal" id="taskModal">
+        <div class="modal__content">
+            <span class="modal__close" id="closeModal">&times;</span>
+            <h2 class="modal__title" id="modalTitle">Новая задача</h2>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label class="form-group__label" for="taskTitle">Название</label>
+                    <input type="text" class="form-group__input" id="taskTitle" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-group__label" for="taskDesc">Описание</label>
+                    <textarea class="form-group__textarea" id="taskDesc" rows="2"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-group__label" for="taskDueDate">Срок выполнения</label>
+                        <input type="datetime-local" class="form-group__datetime" id="taskDueDate">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group__label" for="taskReminder">Напомнить</label>
+                        <input type="datetime-local" class="form-group__datetime" id="taskReminder">
+                    </div>
+                </div>
+                <div class="modal__actions">
+                    <button type="button" class="modal__btn modal__btn--secondary" id="cancelModal">Отмена</button>
+                    <button type="submit" class="modal__btn modal__btn--primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

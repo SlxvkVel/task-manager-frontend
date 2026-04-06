@@ -1,0 +1,11 @@
+@import './styles/variables.css';
+@import './styles/base.css';
+@import './blocks/header/header.css';
+@import './blocks/filters/filters.css';
+@import './blocks/task-card/task-card.css';
+@import './blocks/stats/stats.css';
+@import './blocks/reminders/reminders.css';
+@import './blocks/modal/modal.css';
+@import './blocks/server-time/server-time.css';
+@import './blocks/footer/footer.css';
+@import './styles/responsive.css';

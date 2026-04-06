@@ -1,0 +1,28 @@
+.server-time-widget {
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-md);
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+}
+
+.server-time-widget__title {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+.server-time-widget__clock {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--primary);
+    font-family: monospace;
+    letter-spacing: 1px;
+}
+
+.server-time-widget__timezone {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: var(--spacing-xs);
+}

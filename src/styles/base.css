@@ -1,0 +1,52 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.5;
+    padding: var(--spacing-lg);
+}
+
+.app {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.pages {
+    padding: var(--spacing-xl);
+}
+
+.page {
+    display: none;
+}
+
+.page--active {
+    display: block;
+}
+
+.page__title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--text-dark);
+}
+
+.page__title::before {
+    content: '';
+    width: 8px;
+    height: 32px;
+    background: var(--primary);
+    border-radius: 4px;
+}
