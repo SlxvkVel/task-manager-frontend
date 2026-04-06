@@ -268,7 +268,7 @@ import { Modal } from './blocks/modal/modal.js';
 
     document.getElementById('githubLink').addEventListener('click', (e) => {
         e.preventDefault();
-        window.open('https://github.com/yourusername/task-manager', '_blank');
+        window.open('https://github.com/SlxvkVel/task-manager-frontend', '_blank');
     });
 
     function escapeHtml(str) {
