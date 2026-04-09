@@ -26,7 +26,6 @@ import { Modal } from './blocks/modal/modal.js';
 
     const modal = new Modal(modalElement);
 
-
     let clockInterval = null;
 
     function startLiveClock(serverDateTime, timezone) {
@@ -35,44 +34,43 @@ import { Modal } from './blocks/modal/modal.js';
         const localTime = new Date();
         const offset = serverTime.getTime() - localTime.getTime();
 
-     function updateClock() {
-        const now = new Date();
-        const adjustedTime = new Date(now.getTime() + offset);
-        const timeString = adjustedTime.toLocaleTimeString();
-        const clockElement = document.getElementById('live-clock');
-        const tzElement = document.getElementById('timezone-info');
-        if (clockElement) clockElement.textContent = timeString;
-        if (tzElement && tzElement.textContent === '') {
-            tzElement.textContent = `Часовой пояс: ${timezone}`;
+        function updateClock() {
+            const now = new Date();
+            const adjustedTime = new Date(now.getTime() + offset);
+            const timeString = adjustedTime.toLocaleTimeString();
+            const clockElement = document.getElementById('live-clock');
+            const tzElement = document.getElementById('timezone-info');
+            if (clockElement) clockElement.textContent = timeString;
+            if (tzElement && tzElement.textContent === '') {
+                tzElement.textContent = `Часовой пояс: ${timezone}`;
+            }
         }
-    }
 
-     updateClock();
-     clockInterval = setInterval(updateClock, 1000);
+        updateClock();
+        clockInterval = setInterval(updateClock, 1000);
     }
 
     async function loadAndDisplayTime() {
-    const clockElement = document.getElementById('live-clock');
-    if (!clockElement) return;
+        const clockElement = document.getElementById('live-clock');
+        if (!clockElement) return;
 
-    const timeInfo = await TimeService.getCurrentTimeByIP();
-    if (timeInfo.error) {
-        clockElement.textContent = 'Ошибка';
-        const tzElement = document.getElementById('timezone-info');
-        if (tzElement) tzElement.textContent = timeInfo.error;
-        return;
+        const timeInfo = await TimeService.getCurrentTimeByIP();
+        if (timeInfo.error) {
+            clockElement.textContent = 'Ошибка';
+            const tzElement = document.getElementById('timezone-info');
+            if (tzElement) tzElement.textContent = timeInfo.error;
+            return;
+        }
+        startLiveClock(timeInfo.datetime, timeInfo.timezone);
     }
-    startLiveClock(timeInfo.datetime, timeInfo.timezone);
-    }
-
 
     function renderStatsChart(completed, total) {
         const canvas = document.getElementById('statsChart');
         const percentDiv = document.getElementById('statsChartPercent');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
-        const width = 200;
-        const height = 200;
+        const width = canvas.width;
+        const height = canvas.height;
         const centerX = width / 2;
         const centerY = height / 2;
         const radius = Math.min(width, height) / 2 - 5;
@@ -123,18 +121,16 @@ import { Modal } from './blocks/modal/modal.js';
     }
 
     function renderStats() {
-        const tasks = taskManager.tasks;
-        const total = tasks.length;
-        const completed = tasks.filter(t => t.completed).length;
-        const active = tasks.filter(t => !t.completed).length;
-        const withReminder = tasks.filter(t => t.reminderTime).length;
-        statsGrid.innerHTML = `
-            <div class="stat-card"><div class="stat-card__title">Всего задач</div><div class="stat-card__value">${total}</div></div>
-            <div class="stat-card"><div class="stat-card__title">Выполнено</div><div class="stat-card__value">${completed}</div></div>
-            <div class="stat-card"><div class="stat-card__title">Активных</div><div class="stat-card__value">${active}</div></div>
-            <div class="stat-card"><div class="stat-card__title">С напоминаниями</div><div class="stat-card__value">${withReminder}</div></div>
-        `;
-        renderStatsChart(completed, total);
+    const tasks = taskManager.tasks;
+    const total = tasks.length;
+    const completed = tasks.filter(t => t.completed).length;
+    const active = tasks.filter(t => !t.completed).length;
+    statsGrid.innerHTML = `
+        <div class="stat-card"><div class="stat-card__title">Всего задач</div><div class="stat-card__value">${total}</div></div>
+        <div class="stat-card"><div class="stat-card__title">Выполнено</div><div class="stat-card__value">${completed}</div></div>
+        <div class="stat-card"><div class="stat-card__title">Активных</div><div class="stat-card__value">${active}</div></div>
+    `;
+    renderStatsChart(completed, total);
     }
 
     // Переключение страниц
@@ -146,7 +142,7 @@ import { Modal } from './blocks/modal/modal.js';
             [tasksPage, statsPage, remindersPage].forEach(p => p.classList.remove('page--active'));
             if (page === 'tasks') {
                 tasksPage.classList.add('page--active');
-                loadAndDisplayTime(); 
+                loadAndDisplayTime();
             }
             if (page === 'stats') {
                 statsPage.classList.add('page--active');
@@ -163,6 +159,7 @@ import { Modal } from './blocks/modal/modal.js';
         const tasks = taskManager.getFilteredTasks();
         taskListEl.innerHTML = '';
         tasks.forEach(task => {
+            const isOverdue = taskManager.isOverdue(task);
             const card = createTaskCard(
                 task,
                 (id) => {
@@ -183,6 +180,7 @@ import { Modal } from './blocks/modal/modal.js';
                     }
                 }
             );
+            if (isOverdue) card.classList.add('task-card--overdue');
             taskListEl.appendChild(card);
         });
     }
@@ -205,8 +203,8 @@ import { Modal } from './blocks/modal/modal.js';
                 </div>
                 <span class="reminder-item__status">Активно</span>
                 <div class="reminder-item__actions">
-                    <button class="reminder-item__btn edit-reminder-btn" data-id="${task.id}">✎</button>
-                    <button class="reminder-item__btn delete-reminder-btn" data-id="${task.id}">🗑</button>
+                    <button class="reminder-item__btn edit-reminder-btn" data-id="${task.id}"><i class="fas fa-pen"></i></button>
+                    <button class="reminder-item__btn delete-reminder-btn" data-id="${task.id}"><i class="fas fa-trash-alt"></i></button>
                 </div>
             `;
             reminderFullListEl.appendChild(item);
@@ -249,6 +247,25 @@ import { Modal } from './blocks/modal/modal.js';
     document.getElementById('taskForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const data = modal.getFormData();
+
+        if (!data.title.trim()) {
+            alert('Пожалуйста, введите название задачи');
+            return;
+        }
+        if (!data.dueDate) {
+            alert('Пожалуйста, укажите срок выполнения задачи');
+            return;
+        }
+        const dueDateObj = new Date(data.dueDate);
+        if (isNaN(dueDateObj.getTime())) {
+            alert('Некорректная дата срока выполнения');
+            return;
+        }
+        if (dueDateObj < new Date()) {
+            alert('Срок выполнения не может быть в прошлом');
+            return;
+        }
+
         if (data.id) {
             taskManager.updateTask(data.id, {
                 title: data.title,
@@ -281,6 +298,7 @@ import { Modal } from './blocks/modal/modal.js';
         });
     }
 
+    // Первоначальный запуск
     renderTasks();
     renderStats();
     renderRemindersFull();

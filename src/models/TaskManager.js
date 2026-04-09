@@ -101,4 +101,12 @@ export class TaskManager {
             !t.completed
         );
     }
+
+    isOverdue(task) {
+        if (task.completed) return false;
+        if (!task.dueDate) return false;
+        const now = new Date();
+        const due = new Date(task.dueDate);
+        return due < now;
+    }
 }

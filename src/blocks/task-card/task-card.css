@@ -107,11 +107,6 @@
     margin-bottom: var(--spacing-md);
 }
 
-.task-card__date::before {
-    content: "⏰";
-    font-size: 1rem;
-}
-
 .task-card__actions {
     display: flex;
     gap: var(--spacing-xs);
@@ -135,4 +130,13 @@
 
 .task-card__btn:hover {
     background: rgba(0,0,0,0.05);
+}
+
+.task-card--overdue {
+    border-left: 4px solid #dc3545;
+    background: #fff5f5;
+}
+
+.task-card--overdue .task-card__title {
+    color: #dc3545;
 }

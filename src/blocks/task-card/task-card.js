@@ -11,16 +11,20 @@ export function createTaskCard(task, onToggle, onEdit, onDelete) {
     desc.className = 'task-card__description';
     desc.textContent = task.description || 'Нет описания';
 
-    const dueDate = document.createElement('time');
+    const dueDate = document.createElement('div');
     dueDate.className = 'task-card__date';
-    dueDate.textContent = task.dueDate ? `Срок: ${new Date(task.dueDate).toLocaleString()}` : '';
+    if (task.dueDate) {
+        dueDate.innerHTML = `<i class="far fa-calendar-alt"></i> Срок: ${new Date(task.dueDate).toLocaleString()}`;
+    } else {
+        dueDate.innerHTML = '';
+    }
 
     const actions = document.createElement('div');
     actions.className = 'task-card__actions';
 
     const completeBtn = document.createElement('button');
     completeBtn.className = 'task-card__btn complete-btn';
-    completeBtn.innerHTML = '✓';
+    completeBtn.innerHTML = '<i class="fas fa-check"></i>';
     completeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         onToggle(task.id);
@@ -28,7 +32,7 @@ export function createTaskCard(task, onToggle, onEdit, onDelete) {
 
     const editBtn = document.createElement('button');
     editBtn.className = 'task-card__btn edit-btn';
-    editBtn.innerHTML = '✎';
+    editBtn.innerHTML = '<i class="fas fa-pen"></i>';
     editBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         onEdit(task);
@@ -36,7 +40,7 @@ export function createTaskCard(task, onToggle, onEdit, onDelete) {
 
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'task-card__btn delete-btn';
-    deleteBtn.innerHTML = '🗑';
+    deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
     deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         onDelete(task.id);
