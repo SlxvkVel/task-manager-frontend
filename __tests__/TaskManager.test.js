@@ -47,4 +47,9 @@ describe('TaskManager', () => {
         expect(tm.getTasksDueToday().length).toBe(1);
         expect(tm.getTasksDueToday()[0].title).toBe('Today');
     });
+
+    test('isOverdue возвращает true для просроченной задачи', () => {
+        const task = tm.addTask({ title: 'Test', dueDate: '2020-01-01T12:00' });
+        expect(tm.isOverdue(task)).toBe(true);
+    });
 });
