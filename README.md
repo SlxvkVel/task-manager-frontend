@@ -2,6 +2,8 @@
 
 Клиентская часть веб-приложения менеджера задач с интегрированной системой уведомлений и напоминаний. Разработано в рамках курсовой работы по дисциплине «Фронтенд-разработка».
 
+Ссылка на github pages: https://slxvkvel.github.io/task-manager-frontend/
+
 ## Технологии
 
 - HTML5, CSS3 (БЭМ)
@@ -30,5 +32,4 @@
 ```bash
 npm install
 npm run dev
-
-Ссылка на github pages: https://slxvkvel.github.io/task-manager-frontend/
+```
