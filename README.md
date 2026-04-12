@@ -30,3 +30,5 @@
 ```bash
 npm install
 npm run dev
+
+Ссылка на github pages: https://slxvkvel.github.io/task-manager-frontend/
