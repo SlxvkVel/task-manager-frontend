@@ -21,6 +21,19 @@ export class Modal {
         this.initEvents();
     }
 
+    // Локальная функция для преобразования ISO в ДД.ММ.ГГГГ ЧЧ:ММ
+    isoToLocal(isoStr) {
+        if (!isoStr) return '';
+        const date = new Date(isoStr);
+        if (isNaN(date.getTime())) return '';
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${day}.${month}.${year} ${hours}:${minutes}`;
+    }
+
     initEvents() {
         this.closeBtn.addEventListener('click', () => this.close());
         this.cancelBtn.addEventListener('click', () => this.close());
@@ -35,12 +48,16 @@ export class Modal {
             this.modalTitle.textContent = 'Новая задача';
             this.form.reset();
             this.taskIdInput.value = '';
+            // Очищаем поля даты (на случай, если остались старые значения)
+            if (this.dueDateInput) this.dueDateInput.value = '';
+            if (this.reminderInput) this.reminderInput.value = '';
         } else if (mode === 'edit' && taskData) {
             this.modalTitle.textContent = 'Редактировать задачу';
             this.titleInput.value = taskData.title || '';
             this.descInput.value = taskData.description || '';
-            this.dueDateInput.value = taskData.dueDate ? this.formatDateForInput(taskData.dueDate) : '';
-            this.reminderInput.value = taskData.reminderTime ? this.formatDateForInput(taskData.reminderTime) : '';
+            // Преобразуем ISO в читаемый формат
+            this.dueDateInput.value = taskData.dueDate ? this.isoToLocal(taskData.dueDate) : '';
+            this.reminderInput.value = taskData.reminderTime ? this.isoToLocal(taskData.reminderTime) : '';
             this.taskIdInput.value = taskData.id;
         }
     }
@@ -48,16 +65,6 @@ export class Modal {
     close() {
         this.modal.classList.remove('modal--show');
         setTimeout(() => this.form.reset(), 300);
-    }
-
-    formatDateForInput(date) {
-        const d = new Date(date);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        const hours = String(d.getHours()).padStart(2, '0');
-        const minutes = String(d.getMinutes()).padStart(2, '0');
-        return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
     getFormData() {
